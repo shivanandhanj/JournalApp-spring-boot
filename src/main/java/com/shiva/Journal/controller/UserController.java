@@ -26,9 +26,15 @@ public class UserController {
         return userService.getAllUsers();
     }
     @PostMapping
-    public void saveUser(@RequestBody User user){
-        userService.saveuser(user);
+    public ResponseEntity<?> addUser(@RequestBody User user){
+        try{
+            userService.saveuser(user);
+            return ResponseEntity.ok().build();
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("User with the same name already exists");
+        }
     }
+   
     @GetMapping("/{username}")
     public ResponseEntity<User> getUserByName(@PathVariable String username){
         User user=userService.findByName(username);

@@ -2,6 +2,7 @@ package com.shiva.Journal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,10 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.shiva.Journal.security.JwtService;
 
 @SpringBootTest
-class JournalApplicationTests {
+class JwtServiceTest {
 
-	
-	 @Autowired
+    @Autowired
     private JwtService jwtService;
 
     @Test
@@ -29,5 +29,4 @@ class JournalApplicationTests {
         assertEquals("shiva", username);
         assertTrue(jwtService.isTokenValid(token, "shiva"));
     }
-
 }

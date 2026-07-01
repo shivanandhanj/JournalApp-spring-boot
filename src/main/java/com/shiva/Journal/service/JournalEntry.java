@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shiva.Journal.model.Journalmodel;
 import com.shiva.Journal.model.User;
@@ -19,12 +20,14 @@ public class JournalEntry {
 
     @Autowired
     private UserService userService;
-
+    @Transactional
     public void saveJournalEntry(Journalmodel journal,String username){
         User user=userService.findByName(username);
         journal.setCreatedAt(java.util.Date.from(java.time.ZonedDateTime.now().toInstant()));
         Journalmodel jm=journalEntryRepo.save(journal);
+        System.out.println(jm.getId());
         user.getJournalEntries().add(jm);
+        // user.setName(null);
         userService.saveuser(user);
 
         
@@ -47,8 +50,12 @@ public class JournalEntry {
 
     }
 
-    public void deleteJournalEntryById(ObjectId id){
+    public void deleteJournalEntryById(ObjectId id,String username){
+        User user=userService.findByName(username);
         journalEntryRepo.deleteById(id);
+        user.getJournalEntries().removeIf(journal->journal.getId().equals(id));
+        userService.saveuser(user);
+
 
     }
     public void updateJournalEntry(Journalmodel journal,ObjectId id){
